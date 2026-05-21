@@ -156,13 +156,23 @@ class PlayScene extends Phaser.Scene {
 
         // Click to shoot binding
         this.input.on('pointerdown', (pointer) => {
-            if (this.isPlaying && !this.isPaused && !this.isGameOver) {
-                gameAudio.init();
-                if (this.player) {
-                    this.player.shoot(false); // Shoot straight forward
-                }
-            }
-        });
+
+    // Ignore touches on mobile control buttons
+    if (
+        pointer.x < 220 &&
+        pointer.y > this.scale.height - 220
+    ) {
+        return;
+    }
+
+    if (this.isPlaying && !this.isPaused && !this.isGameOver) {
+        gameAudio.init();
+
+        if (this.player) {
+            this.player.shoot(false);
+        }
+    }
+});
 
         // Keep system cursor and setup graphics
         this.input.setDefaultCursor('default');
