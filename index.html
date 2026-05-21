@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Guy: Zombie Run</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Importing Press Start 2P for retro arcade numbers/headers, and Outfit for body UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- HUD (Top of the Screen) -->
+        <div id="hud" class="hidden font-arcade">
+            <span>SCORE: <span id="score-val">000000</span></span>
+            <span style="margin-left: 24px;">KILLS: <span id="kills-val">000000</span></span>
+        </div>
+
+        <!-- Mobile Controls (Touch Overlay) -->
+        <div id="mobile-controls" class="hidden">
+            <div class="control-group-left">
+                <button id="btn-left" class="mobile-btn">◀</button>
+                <button id="btn-right" class="mobile-btn">▶</button>
+            </div>
+            <div class="control-group-right">
+                <button id="btn-shoot" class="mobile-btn btn-action-shoot">🔫</button>
+                <button id="btn-jump" class="mobile-btn btn-action-jump">▲</button>
+            </div>
+        </div>
+
+        <!-- Start Screen Overlay -->
+        <div id="start-screen" class="overlay-screen">
+            <div class="pixel-border-panel">
+                <h1 class="game-title font-arcade">MINI GUY</h1>
+                <h2 class="game-subtitle font-arcade">ZOMBIE RUN</h2>
+                
+                <div class="instructions">
+                    <div class="control-row">
+                        <span class="control-key">A/D or ◀/▶</span>
+                        <span class="control-desc">Move</span>
+                    </div>
+                    <div class="control-row">
+                        <span class="control-key">Space</span>
+                        <span class="control-desc">Jump / Double Jump</span>
+                    </div>
+                    <div class="control-row">
+                        <span class="control-key">Click/F</span>
+                        <span class="control-desc">Shoot Forward</span>
+                    </div>
+                    <div class="control-row">
+                        <span class="control-key">Esc/P</span>
+                        <span class="control-desc">Pause Game</span>
+                    </div>
+                </div>
+                
+                <button id="btn-play" class="btn font-arcade">START MISSION</button>
+            </div>
+        </div>
+
+        <!-- Unified Pause & Settings Screen Overlay -->
+        <div id="pause-screen" class="overlay-screen hidden">
+            <div class="pixel-border-panel">
+                <h1 class="game-title font-arcade text-warning">GAME PAUSED</h1>
+                
+                <div class="settings-box">
+                    <h3 class="font-arcade settings-title">VOLUME SETTINGS</h3>
+                    <div class="setting-row">
+                        <span class="setting-label">Music Volume</span>
+                        <input type="range" id="slider-music" min="0" max="100" value="50" class="volume-slider">
+                        <span id="music-vol-val" class="vol-percentage font-arcade">50%</span>
+                    </div>
+                    <div class="setting-row">
+                        <span class="setting-label">SFX Volume</span>
+                        <input type="range" id="slider-sfx" min="0" max="100" value="50" class="volume-slider">
+                        <span id="sfx-vol-val" class="vol-percentage font-arcade">50%</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button id="btn-resume" class="btn font-arcade">RESUME</button>
+                    <button id="btn-pause-restart" class="btn btn-danger font-arcade">RESTART</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen Overlay -->
+        <div id="game-over-screen" class="overlay-screen hidden">
+            <div class="pixel-border-panel game-over-panel">
+                <h1 class="game-over-title font-arcade text-danger animate-pulse">MISSION FAILED</h1>
+                <p class="game-over-subtitle">You were overrun by the horde.</p>
+                
+                <div class="stats-panel">
+                    <div class="stat-row">
+                        <span>Distance Survived:</span>
+                        <strong id="stat-distance" class="font-arcade text-warning">0m</strong>
+                    </div>
+
+                    <div class="stat-row">
+                        <span>Zombies Defeated:</span>
+                        <strong id="stat-kills" class="font-arcade text-danger">0</strong>
+                    </div>
+                    <div class="stat-row highlight">
+                        <span>FINAL SCORE:</span>
+                        <strong id="stat-score" class="font-arcade text-success">000000</strong>
+                    </div>
+                </div>
+                
+                <button id="btn-restart" class="btn btn-danger font-arcade">RUN AGAIN (SPACE)</button>
+            </div>
+        </div>
+        
+        <!-- Bottom Controls (Audio & Pause) -->
+        <div class="bottom-controls">
+            <button id="btn-pause-toggle" class="control-btn" title="Pause Game">⏸</button>
+            <button id="audio-toggle" class="audio-btn active" title="Toggle Sound">🔊</button>
+        </div>
+    </div>
+
+    <!-- Load Phaser.js locally -->
+    <script src="phaser.min.js"></script>
+    <script src="audio.js"></script>
+    <script src="sprites.js"></script>
+    <script src="player.js"></script>
+    <script src="enemies.js"></script>
+    <script src="weapons.js"></script>
+    <script src="worldgen.js"></script>
+    <script src="ui.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

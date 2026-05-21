@@ -1,0 +1,23 @@
+{
+  "name": "mini-guy-zombie-run",
+  "version": "1.0.0",
+  "description": "A 2D pixel-art side-scroller platformer browser game with retro audio and zombie survival mechanics.",
+  "scripts": {
+    "dev": "npx browser-sync start --server --files \"*.html, *.css, *.js\" --port 3000"
+  },
+  "keywords": [
+    "game",
+    "pixel-art",
+    "retro",
+    "platformer",
+    "zombie"
+  ],
+  "author": "Antigravity Pair",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^3.0.2"
+  },
+  "dependencies": {
+    "ws": "^8.20.1"
+  }
+}
