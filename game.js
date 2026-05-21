@@ -154,19 +154,6 @@ class PlayScene extends Phaser.Scene {
             P: Phaser.Input.Keyboard.KeyCodes.P
         });
 
-    this.input.off('pointerdown');
-
-this.input.on('pointerdown', (pointer) => {
-    console.log('tap detected');
-
-    if (!this.isPlaying) return;
-    if (this.isPaused) return;
-    if (this.isGameOver) return;
-    if (!this.player) return;
-
-    this.player.shoot(false);
-});
-
         // Keep system cursor and setup graphics
         this.input.setDefaultCursor('default');
         this.uiGraphics = this.add.graphics();
