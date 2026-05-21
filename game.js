@@ -400,9 +400,9 @@ class PlayScene extends Phaser.Scene {
             }
 
             // Continuous Firing loops (holding down F, mouse clicks or mobile shoot triggers)
-            if (this.keys.F.isDown || this.mobileShoot || this.input.activePointer.isDown) {
-                this.player.shoot(false); // Shoot straight forward
-            }
+        if (this.keys.F.isDown || this.mobileShoot) {
+    this.player.shoot(false);
+}
         }
 
 
