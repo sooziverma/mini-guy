@@ -3,7 +3,7 @@
 <head>
     <meta name="base:app_id" content="6a0ee3becc2f5ce0182c4695" />
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>Mini Guy: Zombie Run</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,21 +15,13 @@
     <div id="game-container">
         <!-- HUD (Top of the Screen) -->
         <div id="hud" class="hidden font-arcade">
-            <span>SCORE: <span id="score-val">000000</span></span>
-            <span style="margin-left: 24px;">KILLS: <span id="kills-val">000000</span></span>
+            <div class="hud-stats">
+                <span>SCORE: <span id="score-val">000000</span></span>
+                <span style="margin-left: 24px;">KILLS: <span id="kills-val">000000</span></span>
+                <span style="margin-left: 24px;">HP: <span id="health-val" class="health-hearts"></span></span>
+            </div>
         </div>
 
-        <!-- Mobile Controls (Touch Overlay) -->
-        <div id="mobile-controls" class="hidden">
-            <div class="control-group-left">
-                <button id="btn-left" class="mobile-btn">◀</button>
-                <button id="btn-right" class="mobile-btn">▶</button>
-            </div>
-            <div class="control-group-right">
-                <button id="btn-shoot" class="mobile-btn btn-action-shoot">🔫</button>
-                <button id="btn-jump" class="mobile-btn btn-action-jump">▲</button>
-            </div>
-        </div>
 
         <!-- Start Screen Overlay -->
         <div id="start-screen" class="overlay-screen">
@@ -112,10 +104,23 @@
             </div>
         </div>
         
-        <!-- Bottom Controls (Audio & Pause) -->
-        <div class="bottom-controls">
+        <!-- Top-Right Controls (Audio & Pause) -->
+        <div class="top-right-controls">
             <button id="btn-pause-toggle" class="control-btn" title="Pause Game">⏸</button>
             <button id="audio-toggle" class="audio-btn active" title="Toggle Sound">🔊</button>
+        </div>
+    </div>
+
+
+    <!-- Mobile Controls (Touch Overlay) -->
+    <div id="mobile-controls" class="hidden">
+        <div class="control-group-left">
+            <button id="btn-left" class="mobile-btn">◀</button>
+            <button id="btn-right" class="mobile-btn">▶</button>
+        </div>
+        <div class="control-group-right">
+            <button id="btn-shoot" class="mobile-btn btn-action-shoot">🔫</button>
+            <button id="btn-jump" class="mobile-btn btn-action-jump">▲</button>
         </div>
     </div>
 

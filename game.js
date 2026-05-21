@@ -111,7 +111,7 @@ class PlayScene extends Phaser.Scene {
         // State trackers
         this.score = 0;
         this.ammo = 15;
-        this.health = 1;
+        this.health = 3;
         this.zombiesKilled = 0;
         this.scrollSpeed = 30;
         this.difficultyTimer = 0;
@@ -197,7 +197,7 @@ class PlayScene extends Phaser.Scene {
     startGame() {
         this.score = 0;
         this.ammo = 15;
-        this.health = 1;
+        this.health = 3;
         this.zombiesKilled = 0;
         this.scrollSpeed = 30;
         this.difficultyTimer = 0;
@@ -240,8 +240,8 @@ class PlayScene extends Phaser.Scene {
         // Viewport camera and bounds setup
         this.cameras.main.scrollX = 0;
         this.cameras.main.scrollY = 0;
-        this.cameras.main.setBounds(0, 0, Infinity, 600);
-        this.physics.world.setBounds(0, 0, 800, 450, true, true, true, false);
+        this.cameras.main.setBounds(0, 0, 99999999, 600);
+        this.physics.world.setBounds(0, 0, 99999999, 450, true, false, true, false);
 
         gameUI.updateHUD();
         gameUI.hidePauseScreen();
@@ -332,12 +332,22 @@ class PlayScene extends Phaser.Scene {
         }
 
         // Advance viewport scroll X
+        const oldScrollX = this.cameras.main.scrollX;
         this.cameras.main.scrollX += this.scrollSpeed * dt;
-        this.score += this.scrollSpeed * dt * 0.1;
+
+        // Smoothly follow the player horizontally (keeping player around left-middle of screen)
+        const targetScrollX = this.player.x - 250;
+        if (this.cameras.main.scrollX < targetScrollX) {
+            this.cameras.main.scrollX = targetScrollX;
+        }
+
+        // Add to score based on actual distance scrolled
+        const scrolledDistance = this.cameras.main.scrollX - oldScrollX;
+        this.score += scrolledDistance * 0.1;
         gameUI.updateHUD();
 
         const camX = this.cameras.main.scrollX;
-        this.physics.world.setBounds(camX, 0, 800, 450, true, true, true, false);
+        this.physics.world.setBounds(camX, 0, 99999999, 450, true, false, true, false);
 
         // (Parallax backgrounds and cloud updates removed for performance)
 
@@ -538,6 +548,11 @@ const config = {
     width: 800,
     height: 450,
     parent: 'game-container',
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    pixelArt: true,
     physics: {
         default: 'arcade',
         arcade: {

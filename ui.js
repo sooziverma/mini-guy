@@ -12,6 +12,7 @@ class UIManager {
         this.hud = document.getElementById('hud');
         this.scoreVal = document.getElementById('score-val');
         this.killsVal = document.getElementById('kills-val');
+        this.healthVal = document.getElementById('health-val');
         
         this.startScreen = document.getElementById('start-screen');
         this.pauseScreen = document.getElementById('pause-screen');
@@ -154,8 +155,10 @@ class UIManager {
         // Setup mobile controls listeners (once global)
         const setupMobileButton = (btn, callbackDown, callbackUp) => {
             if (btn) {
-                const eventsDown = ['pointerdown', 'touchstart'];
-                const eventsUp = ['pointerup', 'touchend', 'pointerout', 'touchcancel'];
+                // Use PointerEvent if supported to avoid double-triggering touch and pointer events
+                const usePointer = !!window.PointerEvent;
+                const eventsDown = usePointer ? ['pointerdown'] : ['touchstart'];
+                const eventsUp = usePointer ? ['pointerup', 'pointerout'] : ['touchend', 'touchcancel'];
 
                 eventsDown.forEach(evt => {
                     btn.addEventListener(evt, (e) => {
@@ -239,6 +242,18 @@ class UIManager {
         this.scoreVal.innerText = String(Math.floor(this.scene.score)).padStart(6, '0');
         if (this.killsVal) {
             this.killsVal.innerText = String(this.scene.zombiesKilled).padStart(6, '0');
+        }
+        if (this.healthVal) {
+            const hp = Math.max(0, this.scene.health);
+            let heartsHtml = '';
+            for (let i = 1; i <= 3; i++) {
+                if (i <= hp) {
+                    heartsHtml += '<span class="heart active">♥</span>';
+                } else {
+                    heartsHtml += '<span class="heart depleted">♥</span>';
+                }
+            }
+            this.healthVal.innerHTML = heartsHtml;
         }
     }
 

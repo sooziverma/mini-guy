@@ -33,6 +33,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     jump() {
+        if (this.hurtTimer > 0) return; // Cannot jump when hurt!
         if (this.jumpsRemaining > 0) {
             const isDoubleJump = (this.jumpsRemaining === 1);
             
@@ -60,20 +61,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     takeDamage() {
         if (this.scene.isGameOver) return;
+        if (this.invincibleTimer > 0) return; // Ignore damage during invincibility
+
+        this.scene.health--;
+        this.invincibleTimer = 1.5; // 1.5 seconds of invincibility
+        this.hurtTimer = 0.3; // 0.3 seconds of hurt state (disables control)
         
-        this.scene.health = 0;
         gameAudio.playPlayerHit();
         
-        // Trigger small camera shake
-        this.scene.cameras.main.shake(50, 0.005);
+        // Trigger camera shake (slightly larger for hits)
+        this.scene.cameras.main.shake(100, 0.01);
         
         // Update HUD
         if (this.scene.uiBridge) {
             this.scene.uiBridge.updateHUD();
         }
         
-        // Spawn minimal damage splatter particles (reduced for performance)
-        for (let i = 0; i < 2; i++) {
+        // Spawn damage splatter particles
+        for (let i = 0; i < 4; i++) {
             const vx = (Math.random() * 100 - 50);
             const vy = (Math.random() * 100 - 50);
             if (this.scene.spawnParticle) {
@@ -81,11 +86,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
-        this.scene.endGame();
+        // Apply knockback (pop up and push away from facing direction)
+        const knockbackX = this.facingRight ? -150 : 150;
+        this.body.setVelocity(knockbackX, -250);
+
+        // Check if dead
+        if (this.scene.health <= 0) {
+            this.scene.endGame();
+        }
     }
 
     shoot(aimTowardsMouse = false) {
-        if (this.scene.isGameOver || this.scene.isPaused) return;
+        if (this.scene.isGameOver || this.scene.isPaused || this.hurtTimer > 0) return;
 
         // Check weapon cooldown first
         if (this.scene.weaponSystem) {
@@ -138,19 +150,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Horizontal Movement Input (cursors or WASD or mobile touch)
         let moveX = 0;
-        const keys = this.scene.keys;
-        
-        if (keys.left.isDown || keys.A.isDown || this.scene.mobileMoveLeft) {
-            moveX = -1;
-        } else if (keys.right.isDown || keys.D.isDown || this.scene.mobileMoveRight) {
-            moveX = 1;
-        }
+        if (this.hurtTimer <= 0) {
+            const keys = this.scene.keys;
+            
+            if (keys.left.isDown || keys.A.isDown || this.scene.mobileMoveLeft) {
+                moveX = -1;
+            } else if (keys.right.isDown || keys.D.isDown || this.scene.mobileMoveRight) {
+                moveX = 1;
+            }
 
-        // Calculate horizontal velocity
-        // Snappy movement: smooth acceleration / deceleration (increased rate for responsive controls)
-        const targetVx = moveX * this.speed;
-        const accelRate = moveX !== 0 ? 0.55 : 0.65; // Snappy responsiveness
-        this.body.velocity.x = Phaser.Math.Linear(this.body.velocity.x, targetVx, accelRate);
+            // Calculate horizontal velocity
+            // Snappy movement: smooth acceleration / deceleration (increased rate for responsive controls)
+            const targetVx = moveX * this.speed;
+            const accelRate = moveX !== 0 ? 0.55 : 0.65; // Snappy responsiveness
+            this.body.velocity.x = Phaser.Math.Linear(this.body.velocity.x, targetVx, accelRate);
+        }
 
         // Auto scrolling speed addition (forces player to move with screen)
         // Set actual velocity including scroll speed
@@ -182,7 +196,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.play('player_idle', true);
         }
 
-        this.setAlpha(1.0);
+        if (this.invincibleTimer > 0) {
+            // Flash sprite: toggle alpha based on time
+            const flashRate = 80; // ms
+            const isVisible = Math.floor(time / flashRate) % 2 === 0;
+            this.setAlpha(isVisible ? 0.25 : 0.85);
+        } else {
+            this.setAlpha(1.0);
+        }
 
         // Apply recoil visual offset to the sprite (does not affect physical body position)
         this.x -= (this.facingRight ? this.recoilOffsetX : -this.recoilOffsetX);

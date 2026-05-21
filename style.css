@@ -22,6 +22,15 @@
     -webkit-user-drag: none;
 }
 
+html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+}
+
 body {
     background-color: var(--bg-dark);
     color: var(--text-color);
@@ -29,15 +38,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
 }
 
 /* Game Container - Flat Arcade Cabinet Frame */
 #game-container {
     position: relative;
-    width: 800px;
-    height: 450px;
+    width: 100vw;
+    height: 56.25vw; /* 16:9 aspect ratio */
+    max-width: 177.78vh; /* 16:9 aspect ratio */
+    max-height: 100vh;
     background: #000;
     border: none;
     overflow: hidden;
@@ -71,7 +80,7 @@ canvas {
     position: absolute;
     top: 15px;
     left: 15px;
-    right: 15px;
+    right: 90px; /* clear of top-right controls */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -82,6 +91,31 @@ canvas {
     font-size: 10px;
     z-index: 5;
     pointer-events: none;
+}
+
+.hud-stats {
+    display: flex;
+    align-items: center;
+}
+
+.health-hearts {
+    display: inline-flex;
+    gap: 2px;
+    vertical-align: middle;
+}
+
+.heart {
+    display: inline-block;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.heart.active {
+    color: #ff3366;
+    text-shadow: 0 0 4px rgba(255, 51, 102, 0.6);
+}
+
+.heart.depleted {
+    color: #444444;
 }
 
 .hidden {
@@ -105,7 +139,8 @@ canvas {
 .pixel-border-panel {
     background: #000;
     border: none;
-    width: 440px;
+    width: 90%;
+    max-width: 440px;
     padding: 20px;
     text-align: center;
     display: flex;
@@ -281,10 +316,10 @@ canvas {
     justify-content: center;
 }
 
-/* Bottom Controls (Mute/Pause) */
-.bottom-controls {
+/* Top-Right Controls (Mute/Pause) */
+.top-right-controls {
     position: absolute;
-    bottom: 10px;
+    top: 10px;
     right: 10px;
     display: flex;
     gap: 8px;
@@ -317,7 +352,7 @@ canvas {
 
 /* Mobile Controls Styling */
 #mobile-controls {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     left: 20px;
     right: 20px;
@@ -325,8 +360,9 @@ canvas {
     justify-content: space-between;
     align-items: center;
     pointer-events: none;
-    z-index: 15;
+    z-index: 999;
 }
+
 
 .control-group-left, .control-group-right {
     display: flex;
@@ -377,3 +413,137 @@ canvas {
     background: var(--color-success);
     color: #000;
 }
+
+/* Responsive Scaling Media Queries */
+@media (max-width: 650px), (max-height: 480px) {
+    #hud {
+        font-size: 8px;
+        top: 8px;
+        left: 8px;
+    }
+    
+    .hud-stats span {
+        margin-left: 12px !important;
+    }
+    .hud-stats span:first-child {
+        margin-left: 0 !important;
+    }
+    
+    .top-right-controls {
+        top: 6px;
+        right: 6px;
+        gap: 4px;
+    }
+    
+    .audio-btn, .control-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
+    
+    .pixel-border-panel {
+        padding: 10px;
+        max-width: 320px;
+    }
+    
+    .game-title {
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+    
+    .game-subtitle {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+    
+    .game-over-title {
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+    
+    .game-over-subtitle {
+        font-size: 9px;
+        margin-bottom: 8px;
+    }
+    
+    .instructions, .settings-box, .stats-panel {
+        padding: 6px;
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+    
+    .control-row, .setting-row, .stat-row {
+        font-size: 9px;
+    }
+    
+    .control-key {
+        font-size: 6px;
+        padding: 1px 4px;
+    }
+    
+    .btn {
+        font-size: 8px;
+        padding: 5px 10px;
+        margin: 2px;
+    }
+    
+    #mobile-controls {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+    }
+    
+    .mobile-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 13px;
+    }
+}
+
+/* Portrait orientation settings: move controls below game container and enlarge them */
+@media (orientation: portrait) {
+    #mobile-controls {
+        position: fixed;
+        bottom: 45px;
+        left: 20px;
+        right: 20px;
+    }
+    
+    .mobile-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 22px;
+    }
+    
+    .control-group-left {
+        gap: 16px;
+    }
+    
+    .control-group-right {
+        gap: 16px;
+    }
+}
+
+/* Tiny screen adjustments (width under 360px) to prevent HUD overlap */
+@media (max-width: 360px) {
+    #hud {
+        font-size: 6px;
+        top: 6px;
+        left: 6px;
+        right: 60px;
+    }
+    .hud-stats span {
+        margin-left: 6px !important;
+    }
+    .top-right-controls {
+        top: 4px;
+        right: 4px;
+        gap: 3px;
+    }
+    .audio-btn, .control-btn {
+        width: 20px;
+        height: 20px;
+        font-size: 8px;
+    }
+}
+
