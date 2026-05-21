@@ -155,20 +155,28 @@ class PlayScene extends Phaser.Scene {
         });
 
         // Click to shoot binding
-        this.input.on('pointerdown', (pointer) => {
+    this.input.on('pointerdown', (pointer) => {
 
-    // Ignore touches on mobile control buttons
-    if (pointer.x < window.innerWidth * 0.7) {
-    return;
-}
-
-    if (this.isPlaying && !this.isPaused && !this.isGameOver) {
-        gameAudio.init();
-
-        if (this.player) {
-            this.player.shoot(false);
-        }
+    // Ignore left side of screen
+    if (pointer.x < this.scale.width * 0.7) {
+        return;
     }
+
+    // Ignore bottom control area
+    if (pointer.y > this.scale.height - 120) {
+        return;
+    }
+
+    if (!this.isPlaying || this.isPaused || this.isGameOver) {
+        return;
+    }
+
+    gameAudio.init();
+
+    if (this.player) {
+        this.player.shoot(false);
+    }
+
 });
 
         // Keep system cursor and setup graphics
