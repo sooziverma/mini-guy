@@ -158,12 +158,9 @@ class PlayScene extends Phaser.Scene {
         this.input.on('pointerdown', (pointer) => {
 
     // Ignore touches on mobile control buttons
-    if (
-        pointer.x < 220 &&
-        pointer.y > this.scale.height - 220
-    ) {
-        return;
-    }
+    if (pointer.x < window.innerWidth * 0.7) {
+    return;
+}
 
     if (this.isPlaying && !this.isPaused && !this.isGameOver) {
         gameAudio.init();
