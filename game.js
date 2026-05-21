@@ -154,10 +154,6 @@ class PlayScene extends Phaser.Scene {
             P: Phaser.Input.Keyboard.KeyCodes.P
         });
 
-        // Click to shoot binding
-    this.input.on('pointerdown', (pointer) => {
-
-    // Ignore left side of screen
     this.input.off('pointerdown');
 
 this.input.on('pointerdown', (pointer) => {
