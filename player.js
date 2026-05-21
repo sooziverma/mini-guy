@@ -97,6 +97,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     shoot(aimTowardsMouse = false) {
+        console.log('shoot called');
         if (this.scene.isGameOver || this.scene.isPaused || this.hurtTimer > 0) return;
 
         // Check weapon cooldown first

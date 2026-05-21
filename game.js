@@ -158,25 +158,17 @@ class PlayScene extends Phaser.Scene {
     this.input.on('pointerdown', (pointer) => {
 
     // Ignore left side of screen
-    if (pointer.x < this.scale.width * 0.7) {
-        return;
-    }
+    this.input.off('pointerdown');
 
-    // Ignore bottom control area
-    if (pointer.y > this.scale.height - 120) {
-        return;
-    }
+this.input.on('pointerdown', (pointer) => {
+    console.log('tap detected');
 
-    if (!this.isPlaying || this.isPaused || this.isGameOver) {
-        return;
-    }
+    if (!this.isPlaying) return;
+    if (this.isPaused) return;
+    if (this.isGameOver) return;
+    if (!this.player) return;
 
-    gameAudio.init();
-
-    if (this.player) {
-        this.player.shoot(false);
-    }
-
+    this.player.shoot(false);
 });
 
         // Keep system cursor and setup graphics
