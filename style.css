@@ -547,3 +547,372 @@ canvas {
     }
 }
 
+/* Warning and Success Buttons */
+.btn-warning {
+    border-color: var(--color-warning);
+    color: var(--color-warning);
+}
+
+.btn-warning:hover {
+    background: var(--color-warning);
+    color: #000;
+}
+
+.btn-success {
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.btn-success:hover {
+    background: var(--color-success);
+    color: #000;
+}
+
+/* Daily Check-In Overlay & Modal Panel */
+.checkin-panel {
+    border: 1px solid #fff;
+    padding: 16px;
+    background: #000;
+    max-width: 580px;
+    width: 95%;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.checkin-subtitle {
+    font-size: 8px;
+    color: #888;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+
+/* 7-Day Card Grid */
+.checkin-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    width: 100%;
+    margin: 12px 0;
+}
+
+.checkin-card {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 12px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.card-day {
+    font-size: 7px;
+    color: #888;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.card-coin {
+    font-size: 16px;
+    margin: 4px 0;
+    filter: drop-shadow(0 0 2px rgba(255, 204, 0, 0.2));
+}
+
+.card-reward {
+    font-size: 8px;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Card States: Claimed, Active, Locked */
+.checkin-card.claimed {
+    background: #080808;
+    border-color: #222;
+    opacity: 0.45;
+}
+
+.checkin-card.claimed::after {
+    content: "✓";
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    color: var(--color-success);
+    font-size: 8px;
+    font-weight: bold;
+}
+
+.checkin-card.claimed .card-reward {
+    color: #555;
+    text-decoration: line-through;
+}
+
+.checkin-card.active {
+    background: #1a1500;
+    border-color: var(--color-warning);
+    transform: scale(1.05);
+    z-index: 2;
+    animation: cardPulse 1.5s infinite alternate ease-in-out;
+}
+
+.checkin-card.active .card-day {
+    color: var(--color-warning);
+}
+
+.checkin-card.active .card-reward {
+    color: var(--color-gold);
+    text-shadow: 0 0 4px rgba(255, 204, 0, 0.6);
+}
+
+.checkin-card.locked {
+    opacity: 0.7;
+    background: #0d0d0d;
+}
+
+.checkin-card.locked .card-coin {
+    filter: grayscale(1);
+    opacity: 0.5;
+}
+
+/* Status summary row */
+.checkin-status {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 8px 0;
+    font-size: 8px;
+    border-top: 1px dashed #333;
+    border-bottom: 1px dashed #333;
+    padding: 8px 0;
+    color: #ccc;
+}
+
+.checkin-timer {
+    font-size: 8px;
+    border: 1px solid #333;
+    background: #111;
+    padding: 8px 16px;
+    width: 80%;
+    text-align: center;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+}
+
+/* Claim Success Panel & Floating Particle Animation */
+.claim-success-panel {
+    border: 1px solid var(--color-warning);
+    box-shadow: 0 0 25px rgba(255, 204, 0, 0.4);
+    max-width: 320px;
+    background: #000;
+}
+
+.reward-coins-container {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.floating-coin-particle {
+    position: absolute;
+    bottom: 0;
+    font-size: 16px;
+    pointer-events: none;
+    animation: floatCoin 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Responsive Grid Adapters for Mobile Screens */
+@media (max-width: 650px), (max-height: 480px) {
+    .checkin-panel {
+        max-width: 340px;
+        padding: 10px;
+    }
+    
+    .checkin-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+        margin: 6px 0;
+    }
+    
+    .checkin-card {
+        padding: 6px 2px;
+    }
+    
+    .checkin-card[data-day="7"] {
+        grid-column: span 2;
+    }
+    
+    .card-coin {
+        font-size: 12px;
+        margin: 2px 0;
+    }
+    
+    .card-day {
+        font-size: 6px;
+    }
+    
+    .card-reward {
+        font-size: 7px;
+    }
+    
+    .checkin-status {
+        font-size: 7px;
+        margin: 4px 0;
+        padding: 4px 0;
+    }
+}
+
+/* Micro-animations */
+@keyframes cardPulse {
+    from {
+        box-shadow: 0 0 5px rgba(255, 204, 0, 0.2);
+        border-color: #aa7700;
+    }
+    to {
+        box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+        border-color: var(--color-warning);
+    }
+}
+
+@keyframes floatCoin {
+    0% {
+        transform: translateY(10px) scale(0.6) rotate(0deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(0) scale(1.1) rotate(45deg);
+    }
+    100% {
+        transform: translateY(-80px) scale(0.6) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.animate-glow {
+    animation: textGlow 2s infinite alternate ease-in-out;
+}
+
+@keyframes textGlow {
+    from {
+        text-shadow: 0 0 4px rgba(255, 204, 0, 0.3);
+    }
+    to {
+        text-shadow: 0 0 12px rgba(255, 204, 0, 0.7);
+    }
+}
+
+/* Web3 Info and Leaderboard Box */
+#web3-info {
+    font-size: 7px;
+    background: #0d0d0d;
+    border: 1px dashed #333;
+    padding: 6px;
+    margin-bottom: 8px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.leaderboard-box {
+    margin-top: 15px;
+    border-top: 1px dashed #333;
+    padding-top: 12px;
+}
+
+.leaderboard-list {
+    max-height: 100px;
+    overflow-y: auto;
+    font-size: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px;
+    background: #080808;
+    border: 1px solid #222;
+}
+
+/* Scrollbar for Leaderboard */
+.leaderboard-list::-webkit-scrollbar {
+    width: 4px;
+}
+.leaderboard-list::-webkit-scrollbar-track {
+    background: #000;
+}
+.leaderboard-list::-webkit-scrollbar-thumb {
+    background: #444;
+}
+
+.leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 6px;
+    background: #111;
+    border: 1px solid #1a1a1a;
+    box-sizing: border-box;
+}
+
+.leaderboard-item.rank-1 {
+    border-color: var(--color-gold);
+    background: #1a1500;
+}
+
+.leaderboard-item.rank-1 .rank-num {
+    color: var(--color-gold);
+    font-weight: bold;
+}
+
+.leaderboard-item.rank-2 {
+    border-color: #c0c0c0;
+    background: #0f0f12;
+}
+
+.leaderboard-item.rank-2 .rank-num {
+    color: #c0c0c0;
+}
+
+.leaderboard-item.rank-3 {
+    border-color: #cd7f32;
+    background: #140d08;
+}
+
+.leaderboard-item.rank-3 .rank-num {
+    color: #cd7f32;
+}
+
+.leaderboard-item .rank-num {
+    font-weight: bold;
+    color: #888;
+    margin-right: 6px;
+}
+
+.leaderboard-item .player-addr {
+    font-family: monospace;
+    color: #bbb;
+}
+
+.leaderboard-item .player-score {
+    color: var(--color-success);
+    font-weight: bold;
+}
+
+/* Onboarding Input Focus & Disabled Button Styling */
+#username-input:focus {
+    border-color: var(--color-gold) !important;
+    box-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: #333 !important;
+    color: #666 !important;
+    background: #0d0d0d !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+
+

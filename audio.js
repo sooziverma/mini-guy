@@ -316,6 +316,28 @@ class AudioSystem {
         osc.stop(t + 1.0);
     }
 
+    playCoin() {
+        if (!this.ctx || this.muted || this.sfxVolume === 0) return;
+        this.resume();
+
+        const osc = this.ctx.createOscillator();
+        const gainNode = this.ctx.createGain();
+        
+        osc.type = 'sine';
+        const t = this.ctx.currentTime;
+        osc.frequency.setValueAtTime(987.77, t);          // B5 (first tone)
+        osc.frequency.setValueAtTime(1318.51, t + 0.08);   // E6 (second tone, higher pitch)
+        
+        gainNode.gain.setValueAtTime(0.18, t);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+        
+        osc.connect(gainNode);
+        gainNode.connect(this.sfxGain);
+        
+        osc.start();
+        osc.stop(t + 0.3);
+    }
+
     // --- PROCEDURAL MUSIC (BGM) Sequencer ---
 
     startBGM() {

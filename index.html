@@ -18,6 +18,7 @@
             <div class="hud-stats">
                 <span>SCORE: <span id="score-val">000000</span></span>
                 <span style="margin-left: 24px;">KILLS: <span id="kills-val">000000</span></span>
+                <span style="margin-left: 24px;">COINS: <span id="coins-val" class="text-gold">000000</span></span>
                 <span style="margin-left: 24px;">HP: <span id="health-val" class="health-hearts"></span></span>
             </div>
         </div>
@@ -29,7 +30,11 @@
                 <h1 class="game-title font-arcade">MINI GUY</h1>
                 <h2 class="game-subtitle font-arcade">ZOMBIE RUN</h2>
                 
-                <div class="instructions">
+                <div class="menu-coins font-arcade text-gold" style="margin-bottom: 12px; font-size: 8px;">
+                    COINS: <span id="menu-coins-val">000000</span>
+                </div>
+                
+                <div class="instructions" id="instructions-box">
                     <div class="control-row">
                         <span class="control-key">A/D or ◀/▶</span>
                         <span class="control-desc">Move</span>
@@ -48,7 +53,25 @@
                     </div>
                 </div>
                 
-                <button id="btn-play" class="btn font-arcade">START MISSION</button>
+                <!-- Onboarding Username Input -->
+                <div id="username-container" class="instructions" style="background: #0d0d0d; border: 1px dashed #333; padding: 12px; margin-bottom: 10px; border-radius: 4px; display: flex; flex-direction: column; width: 100%; gap: 6px;">
+                    <label for="username-input" class="font-arcade" style="font-size: 7px; color: #aaa; text-align: left;">PLAYER USERNAME:</label>
+                    <input type="text" id="username-input" class="font-arcade" placeholder="ENTER USERNAME" maxlength="15" style="width: 100%; background: #000; color: #fff; border: 1px solid #333; padding: 8px; font-size: 8px; text-align: center; border-radius: 4px; outline: none; transition: border-color 0.2s ease;" />
+                </div>
+                
+                <div class="menu-buttons" style="display: flex; flex-direction: column; width: 100%; gap: 4px;">
+                    <button id="btn-web3-connect" class="btn btn-warning font-arcade">CONNECT BASE WALLET</button>
+                    <div id="web3-info" class="font-arcade text-success hidden" style="font-size: 7px; margin-bottom: 8px;">
+                        WALLET: <span id="web3-address">0x000...000</span>
+                        <span id="btn-web3-disconnect" class="text-danger" style="margin-left: 8px; cursor: pointer; text-decoration: underline;">[DISCONNECT]</span>
+                    </div>
+                    <button id="btn-play" class="btn font-arcade">START MISSION</button>
+                    <button id="btn-checkin-open" class="btn btn-warning font-arcade">DAILY CHECK-IN</button>
+                </div>
+
+                <div class="contract-info font-arcade" id="contract-info-footer" style="margin-top: 15px; font-size: 6px; color: #666; width: 100%; display: flex; justify-content: center; gap: 4px; align-items: center;">
+                    CONTRACT: <span id="start-contract-val" style="color: var(--color-success); font-family: monospace;">NONE</span> | <a href="deploy-contract.html" style="color: var(--color-warning); text-decoration: none;">DEPLOY NEW</a>
+                </div>
             </div>
         </div>
 
@@ -100,7 +123,89 @@
                     </div>
                 </div>
                 
+                <button id="btn-submit-score" class="btn btn-warning font-arcade hidden" style="width: 100%; margin: 4px 0;">SUBMIT SCORE ONCHAIN</button>
+                <div id="submit-score-fee-note" class="font-arcade text-warning hidden" style="font-size: 6px; margin: 2px 0 6px 0; text-align: center;">(0.000003 ETH ONCHAIN TRANSACTION FEE APPLIES)</div>
                 <button id="btn-restart" class="btn btn-danger font-arcade">RUN AGAIN (SPACE)</button>
+            </div>
+        </div>
+
+        <!-- Daily Check-In Screen Overlay -->
+        <div id="checkin-screen" class="overlay-screen hidden">
+            <div class="pixel-border-panel checkin-panel">
+                <h1 class="game-title font-arcade text-gold animate-glow">DAILY REWARDS</h1>
+                <p class="checkin-subtitle font-arcade">CLAIM COINS EVERY 24H</p>
+                <p class="font-arcade text-warning" style="font-size: 6px; margin: 4px 0 10px 0; text-align: center;">(0.000003 ETH ONCHAIN TRANSACTION FEE APPLIES)</p>
+                
+                <div id="checkin-grid" class="checkin-grid">
+                    <div class="checkin-card" data-day="1">
+                        <span class="card-day font-arcade">DAY 1</span>
+                        <div class="card-coin">🪙</div>
+                        <span class="card-reward font-arcade">100</span>
+                    </div>
+                    <div class="checkin-card" data-day="2">
+                        <span class="card-day font-arcade">DAY 2</span>
+                        <div class="card-coin">🪙</div>
+                        <span class="card-reward font-arcade">150</span>
+                    </div>
+                    <div class="checkin-card" data-day="3">
+                        <span class="card-day font-arcade">DAY 3</span>
+                        <div class="card-coin">🪙</div>
+                        <span class="card-reward font-arcade">200</span>
+                    </div>
+                    <div class="checkin-card" data-day="4">
+                        <span class="card-day font-arcade">DAY 4</span>
+                        <div class="card-coin">🪙</div>
+                        <span class="card-reward font-arcade">250</span>
+                    </div>
+                    <div class="checkin-card" data-day="5">
+                        <span class="card-day font-arcade">DAY 5</span>
+                        <div class="card-coin">🪙</div>
+                        <span class="card-reward font-arcade">300</span>
+                    </div>
+                    <div class="checkin-card" data-day="6">
+                        <span class="card-day font-arcade">DAY 6</span>
+                        <div class="card-coin">🪙</div>
+                        <span class="card-reward font-arcade">350</span>
+                    </div>
+                    <div class="checkin-card" data-day="7">
+                        <span class="card-day font-arcade">DAY 7</span>
+                        <div class="card-coin">👑</div>
+                        <span class="card-reward font-arcade">500</span>
+                    </div>
+                </div>
+                
+                <div class="checkin-status font-arcade">
+                    <div>STREAK: <span id="checkin-streak-val" class="text-warning">0</span>/7 DAYS</div>
+                    <div>COINS: <span id="checkin-coins-val" class="text-gold">000000</span></div>
+                </div>
+                
+                <button id="btn-checkin-claim" class="btn btn-warning font-arcade" style="width: 80%; margin-top: 10px;">CLAIM REWARD</button>
+                <div id="checkin-timer" class="checkin-timer font-arcade text-warning hidden" style="margin-top: 10px;">NEXT REWARD IN 24:00:00</div>
+                
+                <!-- Onchain Leaderboard -->
+                <div class="leaderboard-box" style="width: 100%; margin-top: 15px; border-top: 1px dashed #333; padding-top: 12px; display: flex; flex-direction: column;">
+                    <h3 class="font-arcade text-gold" style="font-size: 8px; margin-bottom: 8px; text-align: center;">GLOBAL LEADERBOARD</h3>
+                    <div id="leaderboard-list" class="leaderboard-list font-arcade">
+                        <!-- Dynamic scores -->
+                        <div style="text-align: center; color: #666; font-size: 7px;">CONNECT WALLET TO VIEW</div>
+                    </div>
+                </div>
+
+                <button id="btn-checkin-close" class="btn font-arcade" style="margin-top: 12px;">CLOSE</button>
+            </div>
+        </div>
+
+        <!-- Claim Success Popup Animation Overlay -->
+        <div id="claim-popup-overlay" class="overlay-screen hidden" style="z-index: 9999; background: rgba(0, 0, 0, 0.9);">
+            <div class="pixel-border-panel claim-success-panel">
+                <div class="reward-title font-arcade text-gold animate-pulse" style="font-size: 16px; margin-bottom: 8px;">REWARD CLAIMED!</div>
+                <div class="reward-amount font-arcade text-success" id="popup-reward-amount" style="font-size: 14px; margin-bottom: 20px;">+100 COINS</div>
+                
+                <div class="reward-coins-container" id="coins-container">
+                    <!-- Particle coins dynamically added here -->
+                </div>
+                
+                <button id="btn-popup-ok" class="btn btn-warning font-arcade" style="width: 60%; margin-top: 10px;">AWESOME</button>
             </div>
         </div>
         
@@ -108,6 +213,17 @@
         <div class="top-right-controls">
             <button id="btn-pause-toggle" class="control-btn" title="Pause Game">⏸</button>
             <button id="audio-toggle" class="audio-btn active" title="Toggle Sound">🔊</button>
+        </div>
+
+        <!-- Wrong Network Warning Overlay -->
+        <div id="network-warning-overlay" class="overlay-screen hidden" style="z-index: 10000; background: rgba(0, 0, 0, 0.95); flex-direction: column;">
+            <div class="pixel-border-panel" style="max-width: 400px; padding: 30px;">
+                <h2 class="font-arcade text-danger animate-pulse" style="font-size: 14px; margin-bottom: 15px;">WRONG NETWORK</h2>
+                <p id="network-warning-msg" class="font-arcade" style="font-size: 8px; line-height: 1.6; color: #ccc; margin-bottom: 25px; text-align: center;">
+                    You are currently on Ethereum mainnet, please switch to Base network to continue.
+                </p>
+                <button id="btn-switch-network" class="btn btn-warning font-arcade" style="width: 100%;">SWITCH TO BASE</button>
+            </div>
         </div>
     </div>
 
@@ -124,6 +240,8 @@
         </div>
     </div>
 
+    <!-- Load ethers.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.umd.min.js"></script>
     <!-- Load Phaser.js locally -->
     <script src="phaser.min.js"></script>
     <script src="audio.js"></script>
