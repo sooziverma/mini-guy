@@ -388,10 +388,32 @@ class UIManager {
 
         // Username Input listener
         if (this.usernameInput) {
+            this.usernameInput.value = localStorage.getItem('miniguy_username') || '';
+            
             this.usernameInput.addEventListener('input', () => {
                 const val = this.usernameInput.value.trim();
                 localStorage.setItem('miniguy_username', val);
                 this.updateOnboardingState();
+            });
+
+            // Prevent event propagation so Phaser doesn't intercept keys (W, A, S, D, Space, Backspace, etc.)
+            const stopProp = (e) => {
+                e.stopPropagation();
+            };
+            this.usernameInput.addEventListener('keydown', stopProp);
+            this.usernameInput.addEventListener('keyup', stopProp);
+            this.usernameInput.addEventListener('keypress', stopProp);
+
+            // Toggle Phaser keyboard manager enabled state to avoid interception when typing
+            this.usernameInput.addEventListener('focus', () => {
+                if (window.gameInstance && window.gameInstance.input && window.gameInstance.input.keyboard) {
+                    window.gameInstance.input.keyboard.enabled = false;
+                }
+            });
+            this.usernameInput.addEventListener('blur', () => {
+                if (window.gameInstance && window.gameInstance.input && window.gameInstance.input.keyboard) {
+                    window.gameInstance.input.keyboard.enabled = true;
+                }
             });
         }
 
