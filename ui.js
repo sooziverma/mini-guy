@@ -39,7 +39,7 @@ class UIManager {
         this.latestDistance = 0;
         this.latestKills = 0;
 
-        // Builder Code: bc_sjkexp20
+        // Builder Code: bc_hnqc0q7b
         // Encoded Builder String: 0x62635f736a6b65787032306f0b00802180218021802180218021802180218021
         this.builderCodeHex = "62635f736a6b65787032306f0b00802180218021802180218021802180218021";
 
