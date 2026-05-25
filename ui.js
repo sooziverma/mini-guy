@@ -33,7 +33,7 @@ class UIManager {
             "function rewards(uint256) external view returns (uint256)",
             "function submitScore(uint256 score) external payable"
         ];
-        this.contractAddress = "0X177C3E282E6DF8AC0DE2EE13AE22BBDD56C50F00";
+        this.contractAddress = "0x177C3E282E6DF8AC0DE2EE13AE22BBDD56C50F00";
         this.onchainState = null; // Cached { coins, streak, lastCheckIn, highScore }
         this.latestGameScore = 0;
         this.latestDistance = 0;
