@@ -40,8 +40,8 @@ class UIManager {
         this.latestKills = 0;
 
         // Builder Code: bc_hnqc0q7b
-        // Encoded Builder String: 0x62635f736a6b65787032306f0b00802180218021802180218021802180218021
-        this.builderCodeHex = "62635f736a6b65787032306f0b00802180218021802180218021802180218021";
+        // Encoded Builder String: 0x62635f686e7163307137620b0080218021802180218021802180218021
+        this.builderCodeHex = "62635f686e7163307137620b0080218021802180218021802180218021";
 
         this.initDOMElements();
         this.setupGlobalListeners();
