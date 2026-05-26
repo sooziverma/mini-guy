@@ -727,7 +727,7 @@ class UIManager {
             
             // Get signer and instantiate contract using connected network as-is
             this.signer = await this.provider.getSigner();
-            this.contractAddress = localStorage.getItem('miniguy_contract_address') || null;
+            this.contractAddress = localStorage.getItem('miniguy_contract_address') || "0x177C3E282E6DF8AC0DE2EE13AE22BBDD56C50F00";
             
             if (this.contractAddress) {
                 this.contract = new ethers.Contract(this.contractAddress, this.contractABI, this.signer);
